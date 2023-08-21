@@ -53,6 +53,9 @@ class IntroSlider extends StatefulWidget {
   /// Render your own widget NEXT button
   final Widget? renderNextBtn;
 
+  /// Use your custom NEXT button (Modified by Hussin Sherif)
+  final Widget? customNextBtn;
+
   /// Render your own style NEXT button
   final ButtonStyle? nextButtonStyle;
 
@@ -143,6 +146,7 @@ class IntroSlider extends StatefulWidget {
 
     // Next
     this.renderNextBtn,
+    this.customNextBtn,
     this.nextButtonStyle,
     this.isShowNextBtn,
     this.onNextPress,
@@ -200,6 +204,7 @@ class IntroSliderState extends State<IntroSlider>
 
   // ---------- NEXT button ----------
   late final Widget renderNextBtn;
+  late final Widget? customNextBtn;
   late final ButtonStyle nextButtonStyle;
   late final bool isShowNextBtn;
   late final void Function()? onNextPress;
@@ -480,6 +485,7 @@ class IntroSliderState extends State<IntroSlider>
     // Next button
     onNextPress = widget.onNextPress ?? () {};
     renderNextBtn = widget.renderNextBtn ?? const Text("NEXT");
+    customNextBtn = widget.customNextBtn;
     nextButtonStyle = widget.nextButtonStyle ?? const ButtonStyle();
   }
 
@@ -647,17 +653,19 @@ class IntroSliderState extends State<IntroSlider>
   }
 
   Widget buildNextButton() {
-    return TextButton(
-      key: nextButtonKey,
-      onPressed: () {
-        onNextPress?.call();
-        if (!isAnimating()) {
-          tabController.animateTo(tabController.index + 1, curve: curveScroll);
-        }
-      },
-      style: nextButtonStyle,
-      child: renderNextBtn,
-    );
+    return customNextBtn ??
+        TextButton(
+          key: nextButtonKey,
+          onPressed: () {
+            onNextPress?.call();
+            if (!isAnimating()) {
+              tabController.animateTo(tabController.index + 1,
+                  curve: curveScroll);
+            }
+          },
+          style: nextButtonStyle,
+          child: renderNextBtn,
+        );
   }
 
   Widget renderActiveIndicator() {
